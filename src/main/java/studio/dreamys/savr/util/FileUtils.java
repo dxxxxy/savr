@@ -30,12 +30,12 @@ public class FileUtils {
             //write
             Files.write(path, baos.toByteArray());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Could not write to path: " + path);
         }
     }
 
     public String decompress() {
-        String data;
+        String data = null;
 
         try {
             //init streams
@@ -53,7 +53,7 @@ public class FileUtils {
             //read
             data = baos.toString(String.valueOf(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Could not read from path: " + path);
         }
 
         return data;
