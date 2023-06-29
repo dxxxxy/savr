@@ -11,14 +11,34 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class FileUtils {
-    public static String loadUncompressed() {
+    private Path path;
+
+    public FileUtils(String path) {
+        this.path = Paths.get(path + ".savr");
+    }
+
+    public void compress(String data) {
+        try {
+            //init streams
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            GZIPOutputStream gos = new GZIPOutputStream(baos);
+
+            //compress
+            gos.write(data.getBytes(StandardCharsets.UTF_8));
+            gos.close();
+
+            //write
+            Files.write(path, baos.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String decompress() {
         String data;
 
         try {
-            //open file
-            Path path = Paths.get("text.savr");
-
-            //init
+            //init streams
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ByteArrayInputStream bais = new ByteArrayInputStream(Files.readAllBytes(path));
             GZIPInputStream gis = new GZIPInputStream(bais);
@@ -37,28 +57,5 @@ public class FileUtils {
         }
 
         return data;
-    }
-
-    public static void saveCompressed(String data) {
-        try {
-            //open file
-            Path path = Paths.get("text.savr");
-
-            //init
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            GZIPOutputStream gos = new GZIPOutputStream(baos);
-
-            //compress
-            gos.write(data.getBytes(StandardCharsets.UTF_8));
-            gos.close();
-
-            //write
-            Files.write(path, baos.toByteArray());
-
-            //print size
-            System.out.println(Files.size(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
