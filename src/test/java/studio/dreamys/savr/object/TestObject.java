@@ -1,4 +1,4 @@
-package studio.dreamys.savr;
+package studio.dreamys.savr.object;
 
 import java.util.Objects;
 
